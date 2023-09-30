@@ -1,4 +1,4 @@
-# tidyverse essentials:
+# reset work space
 
 rm(list = ls())
 graphics.off()
