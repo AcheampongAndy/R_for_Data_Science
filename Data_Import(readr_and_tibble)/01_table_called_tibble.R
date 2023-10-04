@@ -2,8 +2,6 @@
 rm(list = ls())
 
 # load libraries
-library(dplyr)
-library(tidyr)
 library(tibble)
 library(ggplot2)
 
