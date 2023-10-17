@@ -36,12 +36,12 @@ carrier.stat <- df %>%
 ## top 3 performing carriers VS total distance flown by remaining carriers.
 carrier.stat %>% 
   select(UniqueCarrier, totalDistance) %>% 
-  mutate(rank = row_number(totalDistance),
-         totalDistanceSum = sum(totalDistance)) %>% 
-  #arrange(desc(totalDistance)) %>% 
+  mutate(rank = row_number(totalDistance)) %>% 
   group_by(rank >= 13) %>% 
-  mutate(totalDistanceFlown = sum(totalDistance)) %>% 
+  mutate(rank_type = case_when(`rank >= 13` == T ~ "Top_3",
+            TRUE ~ "others")) %>% 
   ungroup() %>% 
-  group_by(totalDistanceFlown) %>% 
-  mutate(percetOfTotalDist = (totalDistanceFlown / totalDistanceSum) * 100) %>% 
-  select( -`rank >= 13`, -totalDistanceSum)
+  group_by(rank_type) %>% 
+  summarise(totalDistanceFlown = sum(totalDistance)) %>% 
+  ungroup() %>% 
+  mutate(percentage = (totalDistanceFlown / sum(totalDistanceFlown) * 100))
