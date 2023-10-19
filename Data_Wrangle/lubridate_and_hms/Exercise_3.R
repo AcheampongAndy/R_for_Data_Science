@@ -24,3 +24,15 @@ holidays <- holidays %>%
   mutate(`next holiday` = lead(date, n = 1)) %>% 
   mutate(`diff days` = as.period(`next holiday` - date),
          `diff weeks` = `diff days` / weeks(1))
+
+# Is today a holiday?
+holidays %>% 
+  select(date) %>% 
+  # creating a column containing today's date
+  mutate(today = Sys.Date(),
+         # extract both month and day from the dates
+         today = format(today, "%m-%d"),
+         date = format(date, "%m-%d")) %>% 
+  # compare if some are equal then indeed today is holiday
+  filter(today == date) %>% 
+  nrow()
