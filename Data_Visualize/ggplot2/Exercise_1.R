@@ -55,8 +55,6 @@ ggplot(aes(distance, fill = Carrier)) +
 
 # export your final plot
 
-  ggsave("density.png", plot = last_plot(),
+  ggsave("Density.png", plot = last_plot(),
          units = "cm",
          width = 26, height = 21)
-  
-  
