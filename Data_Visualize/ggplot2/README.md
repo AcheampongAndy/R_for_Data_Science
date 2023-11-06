@@ -31,6 +31,7 @@ In your R script, import ggplot2 using:
 library(ggplot2)
 ```
 
+
 ## Usage
 
 ### Basic Plotting
@@ -45,6 +46,7 @@ data <- data.frame(x = rnorm(100), y = rnorm(100))
 ggplot(data, aes(x, y)) +
   geom_point()
 ```
+
 
 ### Customization
 Customize your plot by adding layers, changing themes, and modifying labels.
