@@ -19,6 +19,7 @@ ggplot2 is an R package for creating complex and informative statistical graphic
 Ensure that ggplot2 is installed in your R environment. You can install it using:
 
 ```R
+
 install.packages("ggplot2")
 ```
 
@@ -26,6 +27,7 @@ install.packages("ggplot2")
 In your R script, import ggplot2 using:
 
 ````R
+
 library(ggplot2)
 ```
 
@@ -35,6 +37,7 @@ library(ggplot2)
 Here's a simple example to create a scatter plot:
 
 ```R
+
 # Sample data
 data <- data.frame(x = rnorm(100), y = rnorm(100))
 
