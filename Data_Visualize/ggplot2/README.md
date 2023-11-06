@@ -20,14 +20,14 @@ Ensure that ggplot2 is installed in your R environment. You can install it using
 
 ```R
 install.packages("ggplot2")
-q()
+```
 
 ### Importing the Library
 In your R script, import ggplot2 using:
 
 ````R
 library(ggplot2)
-q()
+```
 
 ## Usage
 
@@ -41,7 +41,7 @@ data <- data.frame(x = rnorm(100), y = rnorm(100))
 # Create a scatter plot
 ggplot(data, aes(x, y)) +
   geom_point()
-q()
+```
 
 ### Customization
 Customize your plot by adding layers, changing themes, and modifying labels.
@@ -51,4 +51,4 @@ ggplot(data, aes(x, y)) +
   geom_point(color = "blue") +
   labs(title = "Scatter Plot", x = "X-axis", y = "Y-axis") +
   theme_minimal()
-q()
+```
