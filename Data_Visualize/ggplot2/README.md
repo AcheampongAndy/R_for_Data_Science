@@ -26,7 +26,7 @@ install.packages("ggplot2")
 ### Importing the Library
 In your R script, import ggplot2 using:
 
-````R
+```R
 
 library(ggplot2)
 ```
