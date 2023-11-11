@@ -19,5 +19,39 @@ ggplot2 is an R package for creating complex and informative statistical graphic
 Ensure that ggplot2 is installed in your R environment. You can install it using:
 
 ```R
+
 install.packages("ggplot2")
+```
+
+### Importing the Library
+In your R script, import ggplot2 using:
+
+```R
+
+library(ggplot2)
+```
+
+## Usage
+
+### Basic Plotting
+Here's a simple example to create a scatter plot:
+
+```R
+
+# Sample data
+data <- data.frame(x = rnorm(100), y = rnorm(100))
+
+# Create a scatter plot
+ggplot(data, aes(x, y)) +
+  geom_point()
+```
+
+### Customization
+Customize your plot by adding layers, changing themes, and modifying labels.
+
+```R
+ggplot(data, aes(x, y)) +
+  geom_point(color = "blue") +
+  labs(title = "Scatter Plot", x = "X-axis", y = "Y-axis") +
+  theme_minimal()
 ```
