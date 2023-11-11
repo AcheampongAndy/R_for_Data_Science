@@ -47,21 +47,13 @@ mation techniques!
 	* so each row is represented with carrier, and each column is represented with month, normalized total number of flights are values in table cells
 
 You should get a similar output:
+| Name           | Age | Occupation |
+| -------------- | --- | ---------- |
+| John Doe       | 28  | Engineer   |
+| Jane Smith     | 35  | Teacher    |
+| Bob Johnson    | 42  | Doctor     |
+| Alice Williams | 23  | Student    |
 
-$\begin{table}[h]
-  \centering
-  \begin{tabular}{lcc}
-    \toprule
-    \textbf{Name} & \textbf{Age} & \textbf{Occupation} \\
-    \midrule
-    John Doe & 28 & Engineer \\
-    Jane Smith & 35 & Teacher \\
-    Bob Johnson & 42 & Doctor \\
-    Alice Williams & 23 & Student \\
-    \bottomrule
-  \end{tabular}
-  \caption{Sample Data Table}
-  \label{tab:sample}
-\end{table}$
+
 Where xi,j is the normalized value of total flights for carrier i and month j. In the solution
 video, the visualization of heat map will be shown using ggplot2 library.
