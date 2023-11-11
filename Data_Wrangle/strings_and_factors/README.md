@@ -47,7 +47,7 @@ to R object. If you if will have trouble running the code for this assignment (m
 		* and create a table called corpus.words
 		* corpus.words holds two columns: word - word from the corpus, count - frequency or counts how many time given word appears in the corpus
 		* to table corpus.words add column % coverage, which tells us the percentage of text covered by specific word
-		* ```math 
+		  ```math 
 		% coverage = \frac{count}{sum(count)} * 100
 			```
 	* Using corpus.words try to anwer the questions below:
