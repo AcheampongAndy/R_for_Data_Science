@@ -4,7 +4,7 @@
 Create R script for each exercise. In this assignment we will test our ggplot2 skills!
 
 ### Exercise 1
-* In the first exercise try to re-create plot as seen in *Density.png*. Some guidelines:
+* In the first exercise try to re-create plot as seen below. Some guidelines:
 	* use hflights data set
 	*  find top 4 carriers (total number of flights)
 	* draw density plot for variable ”distance”
@@ -17,7 +17,7 @@ Create R script for each exercise. In this assignment we will test our ggplot2 s
 	* use theme minimal
 	* you can tweak some theme parameters (seen from the plot)
 	* export your final plot
-![plot](Density.png "Title")
+![plot](Density.png)
 
 ### Exercise 2
 * In the second exercise we will create plot as seen in Diamonds.png. Some guidelines:
@@ -36,6 +36,8 @@ Create R script for each exercise. In this assignment we will test our ggplot2 s
 	* create facets using facet wrap and diamond ”color”
 	* you can tweak some theme parameters (seen from the plot)
 	* export your final plot
+
+![plot](Diamonds.png)
 
 ### Exercise 3
 * In this exercise we will create a word cloud (wordscloud.png). The guidelines are:
@@ -56,6 +58,8 @@ Create R script for each exercise. In this assignment we will test our ggplot2 s
 	* use groups for word colors
 	* export your final plot
 
+![plot](wordscloud.png)
+
 ### Exercise 4
 * In the fourth exercise we will create plot as seen in energy\_consumption\_time\_series.png. Some guidelines:
 	* use pjm hourly est.csv - data set from the assignment 4
@@ -66,3 +70,5 @@ Create R script for each exercise. In this assignment we will test our ggplot2 s
 	* create three time series sub plots with cowplot
 	* additional you can tweak some theme parameters (seen from the plot)
 	* export your final plot
+
+![plot](energy_consumption_time_series.png)
