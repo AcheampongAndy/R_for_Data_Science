@@ -17,7 +17,7 @@ Create R script for each exercise. In this assignment we will test our ggplot2 s
 	* use theme minimal
 	* you can tweak some theme parameters (seen from the plot)
 	* export your final plot
-![plot](Density.png)
+![plot](Density.png "Title")
 
 ### Exercise 2
 * In the second exercise we will create plot as seen in Diamonds.png. Some guidelines:
