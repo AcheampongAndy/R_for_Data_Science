@@ -19,7 +19,7 @@ Create R script for each exercise. In this assignment we will test our ggplot2 s
 	* export your final plot
 
 ### Exercise 2
-In the second exercise we will create plot as seen in Diamonds.png. Some guidelines:
+* In the second exercise we will create plot as seen in Diamonds.png. Some guidelines:
 	* use diamonds data set (from ggplot2)
 	* randomly select 10000 diamonds
 	* create new variable volume = x ∗ y ∗ z
@@ -37,7 +37,7 @@ In the second exercise we will create plot as seen in Diamonds.png. Some guideli
 	* export your final plot
 
 ### Exercise 3
-In this exercise we will create a word cloud (wordscloud.png). The guidelines are:
+* In this exercise we will create a word cloud (wordscloud.png). The guidelines are:
 	* use corpus.txt - data set from the assignment 3
 	* clean the corpus (as we did before)
 	* prepare a table called ”corpus.words” (as we did before)
@@ -56,7 +56,7 @@ In this exercise we will create a word cloud (wordscloud.png). The guidelines ar
 	* export your final plot
 
 ### Exercise 4
-In the fourth exercise we will create plot as seen in energy\_consumption\_time\_series.png. Some guidelines:
+* In the fourth exercise we will create plot as seen in energy\_consumption\_time\_series.png. Some guidelines:
 	* use pjm hourly est.csv - data set from the assignment 4
 	* we will draw time series for
 		* hourly energy consumption
