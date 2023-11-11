@@ -17,6 +17,8 @@ Create R script for each exercise. From course sources download zip file called 
 	* total population
 	* sum of percentage - total landmass
 	* sum of percentage - total population
+
+
 Figure 1: Table - Continents
 ![Figure 1](shoot.png)
 ### Exercise 2
