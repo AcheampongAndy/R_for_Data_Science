@@ -4,7 +4,7 @@
 Create R script for each exercise. In this assignment we will test our ggplot2 skills!
 
 ### Exercise 1
-In the first exercise try to re-create plot as seen in *Density.png*. Some guidelines:
+* In the first exercise try to re-create plot as seen in *Density.png*. Some guidelines:
 	* use hflights data set
 	*  find top 4 carriers (total number of flights)
 	* draw density plot for variable ”distance”
