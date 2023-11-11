@@ -18,7 +18,7 @@ Create R script for each exercise. From course sources download zip file called 
 	* sum of percentage - total landmass
 	* sum of percentage - total population
 Figure 1: Table - Continents
-![alt text](~/Music/shoot.png)
+![Figure 1](shoot.png)
 ### Exercise 2
 * In this exercise you will import .csv file called flights 02.csv, which is located in zip file. When you are importing the file, try to consider the following:
 	* assign imported object to R object named df2
