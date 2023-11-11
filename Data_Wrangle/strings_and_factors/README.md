@@ -47,7 +47,7 @@ to R object. If you if will have trouble running the code for this assignment (m
 		* and create a table called corpus.words
 		* corpus.words holds two columns: word - word from the corpus, count - frequency or counts how many time given word appears in the corpus
 		* to table corpus.words add column % coverage, which tells us the percentage of text covered by specific word 
-		* % coverage $= \frac{count}{sum(count)} * 100$
+		* $/% coverage = \frac{count}{sum(count)} \times 100$
 	* Using corpus.words try to anwer the questions below:
 		* how many different words were found in corpus?
 		* how much text is covered with the most frequent word?
@@ -60,7 +60,7 @@ to R object. If you if will have trouble running the code for this assignment (m
 	* first sample words out of top 100 most frequent words
 	* HINT: keep only first 100 rows of sorted table corpus.words
 	* repeat sampling 10000 times
-	* the probability for a word to be selected in sampling step is defined by column count
+	* the probability for a word to be selected in sampling step is defined by column count $prob = \frac{count}{sum(coun)}$
 	* HINT: for sampling rows from given table use dpplyr’s function sample n(), with arguments: size=10000, replace=T, weight=prob
 	* when corpus.words is created convert column word to factor type
 	* extract unique factor levels using function from forcats package
