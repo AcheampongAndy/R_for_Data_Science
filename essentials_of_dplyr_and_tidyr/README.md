@@ -47,12 +47,12 @@ mation techniques!
 	* so each row is represented with carrier, and each column is represented with month, normalized total number of flights are values in table cells
 
 You should get a similar output:
-| Name           | Age | Occupation |
-| -------------- | --- | ---------- |
-| John Doe       | 28  | Engineer   |
-| Jane Smith     | 35  | Teacher    |
-| Bob Johnson    | 42  | Doctor     |
-| Alice Williams | 23  | Student    |
+|           | Month | Month 1 | ... | Month 12 |
+| --------- | ----- | ------- | --- | -------- |
+| Carrier 1 | x1,1  |  x1,2   | ... |  x1,12   |
+| Carrier 2 | x2,1  |  x2,2   | ... |  x2,12   |
+|   ...     |       |         |     |          |
+| Carrier n | xn,1  |  xn,2   | ... |  xn,12   |
 
 
 Where xi,j is the normalized value of total flights for carrier i and month j. In the solution
