@@ -62,7 +62,10 @@ plot_scatter <- function(data, x, y, color,
     xlab(x_title) +
     ylab(y_title) +
     theme_minimal() +
-    theme_fonts()
+    theme_fonts
 }
 
-plot_scatter(diamonds, carat, price, color = color, )
+plot_scatter(diamonds, carat, price, color = color, title = 'Diamond price',
+             x_title = 'carrat',
+             y_title = 'price in USD')
+ 
