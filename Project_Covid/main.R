@@ -679,3 +679,7 @@ df.main <- df.main %>%
                                                       align = 'right',
                                                       fill = NA)) %>% 
   ungroup()
+
+
+## plots
+plot_COVID19_indicators_state_level(state = "California")

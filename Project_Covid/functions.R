@@ -284,4 +284,77 @@ plot_confirmed_deaths_cases_7d_avg_vaccine_doses_total <- function(region.group)
 }
 
 ## d) plot function: selected state indicators
-plot_COVID19_indicators_state_level
+plot_COVID19_indicators_state_level <- function(state_selection){
+  # data
+  df.main.state <- df.main %>% filter(state == state_selection)
+  
+  ## total count
+  p1 <- df.main.state %>% 
+    select(date, `confirmed total`, `deaths total`, vaccine_doses_total) %>% 
+    pivot_longer(cols = c("confirmed total", "deaths total", "vaccine_doses_total"),
+                 names_to = "indicator", values_to = "value") %>% 
+    mutate(indicators = factor(indicator, 
+                               levels = c("vaccine_doses_total", "confirmed total", "deaths total"))) %>% 
+    ggplot(aes(x = date, 
+               y  = value, 
+               fill = indicator)) +
+    geom_area(color = "black") +
+    scale_fill_manual(values = c("forestgreen", "brown1", "black")) +
+    xlab("Date") +
+    ylab("Total counts") +
+    ggtitle(paste0("State: ", state_selection, "- COVID 19 indicators over observed time")) +
+    theme_minimal()
+  
+  ## total count
+  p2 <- df.main.state %>% 
+    select(date, `confirmed daily cases 7day avg`, `death cases 7day avg`, `daily vaccine dosses 7day avg`) %>% 
+    pivot_longer(cols = c("confirmed daily cases 7day avg", "death cases 7day avg", 
+                          "daily vaccine dosses 7day avg"),
+                 names_to = "indicator", values_to = "value") %>% 
+    mutate(value = na_if(value, 0)) %>% 
+    ggplot(aes(x = date, 
+               y  = value, 
+               group = indicator, 
+               color = indicator)) +
+    geom_line(size = .9) +
+    geom_point(size = 1.2) +
+    scale_y_log10() +
+    scale_color_manual(values = c("brown1", "forestgreen",  "black")) +
+    xlab("Date") +
+    ylab("7day averages indicators") +
+    theme_minimal()
+  
+  ## total count
+  p3 <- df.main.state %>% 
+    select(date, 
+           government_response_index_for_display,
+           containment_health_index_for_display,
+           economic_support_index_for_display,
+           stringency_legacy_index_for_display) %>% 
+    pivot_longer(cols = c("government_response_index_for_display",
+                          "containment_health_index_for_display",
+                          "economic_support_index_for_display",
+                          "stringency_legacy_index_for_display"), 
+                 names_to = "index", values_to = "value") %>% 
+    ggplot(aes(x = date, 
+               y  = value, 
+               fill = index)) +
+    geom_area(color = "black") +
+    scale_y_continuous(limits = c(0, 300)) +
+    xlab("Date") +
+    ylab("State response") +
+    theme_minimal()
+  
+  # Create subplots
+  row1 <- cowplot::plot_grid(p1, NULL, rel_widths = c(0.945,0.055))
+  row2 <- cowplot::plot_grid(p2, NULL, rel_widths = c(0.97,0.03))
+  row3 <- cowplot::plot_grid(p3, NULL, rel_widths = c(1,0))
+  plot_ <- cowplot::plot_grid(row1, row2, row3, nrow = 3)
+  
+  # export plot
+  ggsave(filename = paste0("./explore/09_COVID19_indicators_state", state_selection, ".png"),
+         plot = plot_, 
+         width = 35, height = 25, units = "cm", 
+         dpi = 600)
+}
+
