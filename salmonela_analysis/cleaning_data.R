@@ -1,27 +1,30 @@
 # load libraries
 library(tidyverse)
+library(readxl)
 library(janitor)
 library(zoo)
 library(tidystringdist)
 
 # read data set
-dt <- read_csv(file.choose())
+dt <- read_excel(file.choose(), na = c("", "NA"))
 
 # inspect data
 View(dt)
 colnames(dt)
 
 # creating a data frame
-data_s_typhi <- dt %>% 
-  select(Site_ID, SiteID_byMonth, SampleID_Method, TTR_Positive, TVIB_Positive, STAG_Positive,
-         S_Typhi, Lon, Lat, FlowSpeed, Depth.of.wastewater.sewage, Width.of.wastewater.sewage,
-         DeployDuration, NotRecovered, WaterQuality, Temperature, Oxygen_reduction_potential,
-         pH, dissolved_oxygen, Electrical_conductivity, Total_dissolved_solids, Salinity) %>% 
+data_s <- dt %>% 
+  select(Site_ID, Sample_ID, Cluster, Town, Type_of_Sampling,
+         VISIT, Date_Sampling, Singleplex, SPC, HF183, S_Typhi, SiteName,
+         FlowSpeed, 'Depth of wastewater/sewage', 'Width of wastewater/sewage',
+         DeployDuration, NotRecovered, WaterQuality, Calibrate, Temp, ORP, pH,
+         DO, EC, pH, DO, SSG, TDS, SAL) %>% 
   clean_names()
 
 # check the names of the variable of interest
-colnames(data_s_typhi)
-View(data_s_typhi)
+colnames(data_s)
+View(data_s)
+
 
 # 2) Initial data inspection
 # Check
@@ -61,10 +64,11 @@ count_NA <- function(df){
 }
 
 ## missing values
-count_NA(data_s_typhi)
+count_NA(data_s)
 
 ## dealing with missing values
-data_s_typhi <- data_s_typhi %>% 
-  mutate(ttr_positive = replace_na(ttr_positive, 2))
+data_s <- data_s %>% 
+  mutate(hf183 = replace_na(hf183, 0))
 
-data_s_typhi <- na.omit(data_s_typhi)
+## save the clean data set
+write_csv(data_s, '/home/acheampong/Music/R_for_Data_Science/salmonela_analysis/clean1.csv')
