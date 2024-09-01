@@ -1,0 +1,571 @@
+---
+title: "Predictive Analytics for Kidney Disease Progression"
+author: "Acheampong Andrews"
+date: "2024-03-26"
+output: html_document
+---
+
+### Loading necessary libraries  
+```{r}
+library(tidyverse)
+library(janitor)
+```
+
+### Load dataset
+```{r}
+df <- read_delim('/home/acheampong/Music/final project/Chronic_Kidney_Disease/chronic_kidney_disease_full.arff',
+                 col_names = FALSE,
+                 delim = ',',
+                 na = c("?", "NA"),
+                 skip = 145)
+
+View(df)
+```
+
+### Renaming Columns
+```{r}
+colnames(df) <- 
+  c(
+    'age','Blood Pressure','Specific Gravity','Albumin' ,'Sugar','Red Blood Cells' ,'Pus Cell','Pus Cell clumps', 'Bacteria', 'Blood Glucose Random', 'Blood Urea', 'Serum Creatinine', 'Sodium', 'Potassium', 'Hemoglobin', 'Packed  Cell Volume', 'White Blood Cell Count', 'Red Blood Cell Count', 'Hypertension', 'Diabetes Mellitus', 'Coronary Artery Disease', 'Appetite', 'Pedal Edema', 'Anemia', 'class')
+
+df <- df %>% clean_names()
+
+View(df)
+```
+
+
+### Display structure of the dataset
+```{r}
+str(df)
+```
+
+
+### Display unique values in categorical columns
+```{r}
+cat_col <- names(df)[sapply(df, function(x) is.character(x))]
+
+for (col in cat_col){
+  cat(paste(col, "has", unique(df[col]), "values\n"))
+}
+```
+
+
+### Correct values in the "diabetes_mellitus" column
+```{r}
+df <- df %>% mutate(
+  new_diabetes_mellitus = case_when(
+    diabetes_mellitus == " yes" ~ "yes",
+    diabetes_mellitus == "\tno" ~ "no",
+    diabetes_mellitus == "\tyes" ~ "yes",
+    diabetes_mellitus == "" ~ NA,
+    .default =  diabetes_mellitus
+  )
+)
+
+df %>% select(diabetes_mellitus, new_diabetes_mellitus) %>% 
+  filter(diabetes_mellitus %in% c(" yes", "\tno", "\tyes", ""))
+
+View(df)
+```
+
+
+
+### Correct values in the "coronary_artery_disease" column
+```{r}
+df <- df %>% mutate(
+  new_coronary_artery_disease = case_when(
+    coronary_artery_disease == "\tno" ~ "no",
+    .default = coronary_artery_disease
+  )
+)
+
+df %>% select(coronary_artery_disease, new_coronary_artery_disease) %>% 
+  filter(coronary_artery_disease == "\tno")
+
+View(df)
+```
+
+
+
+### Correct values in the "appetite" and "pedal_edema" columns
+```{r}
+df <- df %>% mutate(
+  new_appetite = case_when(
+    appetite == "no" ~ "good",
+    .default = appetite
+  ),
+  new_pedal_edema = case_when(
+    pedal_edema == "good" ~ "no",
+    .default = pedal_edema
+  )
+)
+
+df %>% select(appetite, new_appetite, pedal_edema, new_pedal_edema) %>% 
+  filter(pedal_edema == "good" | appetite == "no")
+
+View(df)
+```
+
+
+
+### Correct values in the "class" column
+```{r}
+df <- df %>% mutate(
+  new_class = case_when(
+    class == "ckd\t" ~ "ckd",
+    class == "ckd," ~ "ckd",
+    class == "no,notckd" ~ "notckd",
+    .default = class
+  )
+)
+
+df %>% select(class, new_class) %>% 
+  filter(class %in% c("ckd\t", "ckd,", "no,notckd"))
+
+View(df)
+```
+
+
+
+### Remove unnecessary columns and rename some columns
+```{r}
+df <- df %>% select(-class, -appetite, -pedal_edema, -coronary_artery_disease, -diabetes_mellitus) %>% 
+  rename(class = new_class,
+         appetite = new_appetite,
+         pedal_edema = new_pedal_edema,
+         coronary_artery_disease = new_coronary_artery_disease,
+         diabetes_mellitus = new_diabetes_mellitus)
+
+View(df)
+```
+
+
+
+### Display unique values in categorical columns
+```{r}
+for (col in cat_col){
+  cat(paste(col, "has", unique(df[col]), "values\n"))
+}
+```
+
+
+
+### Correct values in the "packed_cell_volume" column
+```{r}
+df <- df %>% mutate(
+  new_packed_cell_volume = case_when(
+    packed_cell_volume == "\t?" ~ NA,
+    packed_cell_volume == "\t43" ~ "43",
+    .default = packed_cell_volume
+  )
+)
+
+df %>% select(packed_cell_volume, new_packed_cell_volume) %>% 
+  filter(packed_cell_volume %in% c("\t?", "\t43"))
+```
+
+
+### Correct values in the "white_blood_cell_count" column
+```{r}
+df <- df %>% mutate(
+  new_white_blood_cell_count = case_when(
+    white_blood_cell_count == "\t6200" ~ "6200",
+    white_blood_cell_count == "\t8400" ~ "8400",
+    white_blood_cell_count == "\t?" ~ NA,
+    .default = white_blood_cell_count
+  )
+)
+
+View(df)
+
+df %>% select(white_blood_cell_count, new_white_blood_cell_count) %>% 
+  filter(white_blood_cell_count %in% c("\t6200", "\t8400", "\t?"))
+```
+
+
+### Correct values in the "red_blood_cell_count" column
+```{r}
+df <- df %>% mutate(
+  new_red_blood_cell_count = case_when(
+    red_blood_cell_count == "\t?" ~ NA,
+    .default = red_blood_cell_count
+  )
+)
+
+df %>% select(red_blood_cell_count, new_red_blood_cell_count) %>% 
+  filter(red_blood_cell_count == "\t?")
+
+View(df)
+```
+
+
+### Remove unnecessary columns and rename some columns
+```{r}
+df <- df %>% select(-red_blood_cell_count, -packed_cell_volume, -white_blood_cell_count ) %>% 
+  rename(red_blood_cell_count = new_red_blood_cell_count,
+         packed_cell_volume = new_packed_cell_volume,
+         white_blood_cell_count = new_white_blood_cell_count)
+
+View(df)
+```
+
+
+### Display unique values in categorical columns
+```{r}
+for (col in cat_col){
+  cat(paste(col, "has", unique(df[col]), "values\n"))
+}
+```
+
+
+### Convert certain columns to double type
+```{r}
+df <- df %>% mutate_at(
+  .vars = c("packed_cell_volume", "white_blood_cell_count", "red_blood_cell_count"), .funs = as.double)
+
+str(df)
+```
+
+
+### Display distinct values for numeric columns
+```{r}
+num_col <- names(df)[sapply(df, function(x) is.double(x))]
+
+for (col in num_col){
+  cat(paste(col, "has", distinct(df[col]), "values\n"))
+}
+```
+
+
+### Function to inspect missing values
+```{r}
+count_NA <- function(df){
+  require(tidyverse)
+  require(cowplot)
+  
+  df_count_NA <- map(df, ~sum(is.na(.))) %>% 
+    simplify() %>% 
+    tibble(columns = names(.),
+           NAs = .) %>% 
+    mutate(`NAs %` = round(NAs / nrow(df) * 100,2))
+  
+  print(df_count_NA %>% as.data.frame())
+  
+  # plot absolute NA counts
+  p1 <- df_count_NA %>% 
+    ggplot(aes(x = columns,
+           y = NAs)) +
+    geom_col() +
+    theme(axis.text.x = element_text(angle = 90))
+  
+  # plot relative NA counts
+  p2 <- df_count_NA %>% 
+    ggplot(aes(x = columns,
+           y = `NAs %`)) + 
+    geom_col() +
+    scale_y_continuous(limits = c(0, 100)) +
+    theme(axis.text.x = element_text(angle = 90))
+  
+  plot_grid(p1, p2, nrow = 2)
+}
+```
+
+
+### Inspect missing values in the dataset
+```{r}
+## missing values
+count_NA(df)
+```
+
+
+### Removing columns with more than 30% missing values
+```{r}
+df <- df %>% select(-red_blood_cell_count, -red_blood_cells)
+```
+
+
+### Converting columns to character
+```{r}
+df <- df %>% mutate(
+  across(c("specific_gravity", "albumin", "sugar"), as.character)
+)
+str(df)
+```
+
+
+### Group categorical and numerical columns
+```{r}
+cat_cols <- names(df)[sapply(df, function(x) is.character(x))]
+num_cols <- names(df)[sapply(df, function(x) is.double(x))]
+cat_cols
+num_cols
+```
+
+
+### Distribution of categorical features
+```{r}
+for (col in cat_cols){
+  filtered_df <- df[!is.na(df[[col]]), ]
+  
+  plt <- ggplot(filtered_df, aes(x = !!as.name(col), fill = !!as.name(col))) +
+    geom_bar() +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  print(plt)
+}
+```
+
+
+### Mode Imputation
+```{r}
+for (col in cat_cols){
+  mode_val <- names(sort(table(df[[col]]), decreasing = TRUE)[1])
+  df[[col]][is.na(df[[col]])] <- mode_val
+}
+
+count_NA(df)
+```
+
+
+### Distribution of numeric features
+```{r}
+for (col in num_cols) {
+  filtered_df <- df[!is.na(df[[col]]), ]
+  
+  plt <- ggplot(filtered_df, aes_string(x = col)) +
+    geom_density(aes(fill = col), alpha = 0.5) +
+    labs(x = col) +
+    theme_minimal()
+  
+  print(plt)
+}
+
+```
+
+### Mean and Median Imputation
+```{r}
+for (col in num_cols){
+  median_value = median(df[[col]], na.rm = T)
+  df[[col]][is.na(df[[col]])] <- median_value
+}
+
+count_NA(df)
+```
+
+
+
+
+### Descriptive Statistics for Numeric Variables
+```{r}
+library(summarytools)
+descr(df)
+```
+
+
+### Descriptive Statistics for Categorical Variables
+```{r}
+freq(df)
+```
+
+
+#### Correlation between Numeric Independent Variables
+```{r}
+# Assuming your dataset is named 'df', replace it with your actual dataset name
+# Select numeric variables by name
+numeric_variables <- select(df, age, blood_pressure, blood_glucose_random,
+                            blood_urea, serum_creatinine, sodium,
+                            potassium, hemoglobin, packed_cell_volume,
+                            white_blood_cell_count)
+
+# Calculate correlation matrix
+correlation_matrix <- cor(numeric_variables)
+
+# Melt the correlation matrix for plotting
+library(reshape2)
+melted_correlation <- melt(correlation_matrix)
+
+# Plot heatmap
+ggplot(melted_correlation, aes(Var1, Var2, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                       midpoint = 0, limit = c(-1,1), space = "Lab", 
+                       name="Correlation") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+                                   size = 12, hjust = 1)) +
+  geom_text(aes(label = round(value, 2)), color = "black") +
+  labs(title = "Correlation Between Independent Variables (Multicollinearity)", x = "Variables", y = "Variables")
+
+```
+
+### After checking Multicollinearity
+```{r}
+num_vars <- numeric_variables %>% 
+  select(-blood_urea, -sodium, -packed_cell_volume)
+
+# Calculate correlation matrix
+correlation_matrix <- cor(num_vars)
+
+# Melt the correlation matrix for plotting
+library(reshape2)
+melted_correlation <- melt(correlation_matrix)
+
+# Plot heatmap
+ggplot(melted_correlation, aes(Var1, Var2, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                       midpoint = 0, limit = c(-1,1), space = "Lab", 
+                       name="Correlation") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+                                   size = 12, hjust = 1)) +
+  geom_text(aes(label = round(value, 2)), color = "black") +
+  labs(title = "Correlation Between Independent Variables (Multicollinearity)", x = "Variables", y = "Variables")
+```
+
+
+### Converting columns to factors
+```{r}
+
+df1 <- df %>% 
+  select(-blood_urea, -sodium, -packed_cell_volume) %>% 
+  mutate(
+    class = factor(class),
+    specific_gravity = factor(specific_gravity),
+    albumin = factor(albumin),
+    sugar = factor(sugar),
+    pus_cell = factor(pus_cell),
+    bacteria = factor(bacteria),
+    hypertension = factor(hypertension),
+    pus_cell_clumps = factor(pus_cell_clumps),
+    anemia = factor(anemia),
+    diabetes_mellitus = factor(diabetes_mellitus),
+    coronary_artery_disease = factor(coronary_artery_disease),
+    appetite = factor(appetite),
+    pedal_edema = factor(pedal_edema)
+  )
+
+```
+
+
+### Select only numeric columns from the dataset for PCA analysis
+```{r}
+# Identify numeric columns in the dataset
+num_cols <- names(df1)[sapply(df1, function(x) is.numeric(x))]
+
+# Select only numeric columns from the dataset for PCA analysis
+pc_data <- df1 %>% select(num_cols)
+
+# Display the names of the selected numeric columns
+names(pc_data)
+```
+
+
+### Perform PCA
+```{r}
+# Standardize the predictors
+data_scaled <- scale(pc_data)
+
+# Perform PCA
+pca_result <- prcomp(data_scaled, center = TRUE, scale. = TRUE)
+summary(pca_result)
+
+```
+
+
+### Extract the eigenvectors
+```{r}
+# Extract the loadings (rotation)
+pca_loadings <- pca_result$rotation
+
+top_contributors <- function(loadings, pc, top_n=7) {
+  abs_loadings <- abs(loadings[, pc])
+  sorted_indices <- order(abs_loadings, decreasing = TRUE)
+  return(names(abs_loadings)[sorted_indices[1:top_n]])
+}
+
+# Get top contributing variables for the first 4 PCs
+selected_vars <- unique(unlist(lapply(1, function(pc) top_contributors(pca_loadings, pc))))
+selected_vars
+```
+
+
+### Build a logistic regression model using selected predictors
+```{r}
+# Build model
+model <- glm(class ~ hemoglobin + serum_creatinine + 
+               hypertension + blood_glucose_random, data = df1, family = binomial)
+
+# Display a summary of the model
+summary(model)
+```
+
+
+### Use the broom package to tidy the model summary into a neat data frame
+```{r}
+library(broom)
+tidy_model = tidy(model)
+print(tidy_model)
+```
+
+
+
+
+### Model training and evaluation
+```{r}
+#install.packages("caret")
+#install.packages("e1071")  # Required for the confusionMatrix function
+library(caret)
+library(e1071)
+
+set.seed(123)  # For reproducibility
+train_control <- trainControl(method = "cv", number = 10, savePredictions = "final", classProbs = TRUE)
+
+model <- train(class ~ hemoglobin + serum_creatinine + hypertension + blood_glucose_random,
+               data = df1,
+               method = "glm",
+               family = "binomial",
+               trControl = train_control)
+
+predictions <- model$pred
+
+# Create an empty list to store results
+results <- list()
+
+# Loop over each fold
+for (i in 1:10) {
+  
+  if(i < 10){
+    fold_predictions <- predictions[predictions$Resample == paste("Fold0", i, sep = ""), ]
+  } else{
+    fold_predictions <- predictions[predictions$Resample == paste("Fold", i, sep = ""), ]
+  }
+  # Create a confusion matrix
+  cm <- confusionMatrix(fold_predictions$pred, fold_predictions$obs)
+
+  # Extract performance metrics
+  accuracy <- cm$overall['Accuracy']
+  precision <- cm$byClass['Pos Pred Value']
+  recall <- cm$byClass['Sensitivity']
+  f1_score <- 2 * (precision * recall) / (precision + recall)
+
+  # Store results
+  results[[i]] <- list(
+      Fold = i,
+      Accuracy = accuracy,
+      Precision = precision,
+      Recall = recall,
+      F1_Score = f1_score
+  )
+}
+
+# Convert results to a data frame
+results_df <- do.call(rbind, lapply(results, as.data.frame))
+
+print(model)
+summary(model)
+print(results_df)
+
+```
+
